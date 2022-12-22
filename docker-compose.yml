@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  updater:
+    image: ghcr.io/chicken/aur-osu-bumper:latest
+    volumes:
+      - "./automation_key:/ssh_key:ro"
+    environment:
+      GIT_USER: "Bump Bot"
+      GIT_EMAIL: "bot@example.com"
+      GIT_SSH_KEY: "/ssh_key"
+      CRON_SCHEDULE: "0 * * * *"
+      DISCORD_WEBHOOK: "https://discord.com/api/webhooks/..."
