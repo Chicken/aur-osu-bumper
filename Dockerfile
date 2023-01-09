@@ -43,11 +43,13 @@ RUN pacman -Syu --noconfirm \
 
 WORKDIR /osu
 
-COPY --chown=node:node .yarn/ .yarn/
-COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
+COPY --chown=osu:osu .yarn/ .yarn/
+COPY --chown=osu:osu package.json yarn.lock .yarnrc.yml ./
 
 RUN yarn workspaces focus --all --production
 
-COPY --from=builder /osu/dist/ dist/
+COPY --from=builder --chown=osu:osu /osu/dist/ dist/
+
+USER osu
 
 ENTRYPOINT [ "yarn", "start" ]
