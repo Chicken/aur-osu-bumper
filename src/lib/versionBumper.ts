@@ -11,7 +11,7 @@ export async function bumpVersionTo(version: string, generatePatch = false): Pro
 
     const { stderr: pullStdErr } = await exec("git pull");
     if (pullStdErr.split("\n").length > 3) throw new Error(pullStdErr);
-    
+
     const pkgbuild = (await readFile("/osu/aur/PKGBUILD", "utf8"))
         .replace(/^pkgver=.+$/m, `pkgver=${version}`)
         .replace(/^pkgrel=.+$/m, `pkgrel=1`);
