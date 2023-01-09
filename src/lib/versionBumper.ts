@@ -9,6 +9,9 @@ export async function bumpVersionTo(version: string, generatePatch = false): Pro
     actionLock = true;
     logger.debug(generatePatch ? "Generating a patch for" : "Bumping to", version);
 
+    const { stderr: pullStdErr } = await exec("git pull");
+    if (pullStdErr.split("\n").length > 3) throw new Error(pullStdErr);
+    
     const pkgbuild = (await readFile("/osu/aur/PKGBUILD", "utf8"))
         .replace(/^pkgver=.+$/m, `pkgver=${version}`)
         .replace(/^pkgrel=.+$/m, `pkgrel=1`);
@@ -26,7 +29,8 @@ export async function bumpVersionTo(version: string, generatePatch = false): Pro
         actionLock = false;
         return stdout;
     } else {
-        await exec("git push -u origin master", { errorOnStdErr: true });
+        const { stderr: pushStdErr } = await exec("git push -u origin master");
+        if (pushStdErr.split("\n").length > 3) throw new Error(pushStdErr);
         actionLock = false;
     }
 }
