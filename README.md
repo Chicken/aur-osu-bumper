@@ -1,3 +1,3 @@
 # AUR osu! bumper
 
-Automaticly bump `osu-lazer-bin` to the latest version.
+Automatically bump `osu-lazer-bin` to the latest version.

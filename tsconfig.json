@@ -1,0 +1,14 @@
+{
+    "extends": "@sapphire/ts-config/extra-strict-without-decorators",
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "target": "ESNext",
+        "module": "ESNext",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
+        "composite": true,
+        "importHelpers": true
+    },
+    "include": ["./src"]
+}

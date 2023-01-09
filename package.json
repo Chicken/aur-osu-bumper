@@ -1,0 +1,75 @@
+{
+    "name": "aur-osu-bumper",
+    "description": "Automatically bump `osu-lazer-bin` to the latest version.",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "author": "Antti <antti@antti.codes>",
+    "license": "MIT",
+    "private:": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Chicken/aur-osu-bumper.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Chicken/aur-osu-bumper/issues"
+    },
+    "homepage": "https://github.com/Chicken/aur-osu-bumper#readme",
+    "keywords": [
+        "discord",
+        "bot",
+        "aur",
+        "osu",
+        "osu-lazer"
+    ],
+    "scripts": {
+        "start": "node --enable-source-maps -r dotenv/config --no-warnings dist/index.js",
+        "dev": "yarn build && NODE_ENV=development yarn start",
+        "build": "tsc -b",
+        "watch": "tsc -b -w",
+        "format": "prettier --write .",
+        "update": "yarn upgrade-interactive"
+    },
+    "prettier": {
+        "printWidth": 120,
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": false,
+        "quoteProps": "consistent",
+        "trailingComma": "es5",
+        "bracketSpacing": true,
+        "arrowParens": "always",
+        "endOfLine": "lf",
+        "overrides": [
+            {
+                "files": "*.yml",
+                "options": {
+                    "tabWidth": 2
+                }
+            }
+        ]
+    },
+    "engines": {
+        "node": ">=18",
+        "npm": ">=7"
+    },
+    "dependencies": {
+        "bent": "^7.3.12",
+        "colorette": "^2.0.19",
+        "discord.js": "^14.7.1",
+        "dotenv": "^16.0.3",
+        "enmap": "^5.9.5",
+        "node-cron": "^3.0.2",
+        "tslib": "^2.4.1"
+    },
+    "devDependencies": {
+        "@sapphire/ts-config": "^3.3.4",
+        "@types/bent": "^7",
+        "@types/node": "^18.11.18",
+        "@types/node-cron": "^3",
+        "@types/prettier": "^2",
+        "prettier": "^2.8.2",
+        "typescript": "^4.9.4"
+    },
+    "packageManager": "yarn@3.3.1"
+}

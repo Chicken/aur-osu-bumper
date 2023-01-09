@@ -1,0 +1,22 @@
+# dev
+node_modules/
+dist/
+.env
+.vs/
+.idea/
+aur/
+data/
+automation_key
+
+# node
+package-lock.json
+.node_repl_history
+*.log*
+*.heapsnapshot
+
+# mac users
+.DS_Store
+
+# yarn
+.yarn/install-state.gz
+.yarn/build-state.yml
