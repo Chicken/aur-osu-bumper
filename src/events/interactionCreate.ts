@@ -18,7 +18,7 @@ export default async (interaction: Interaction) => {
         } catch (err) {
             try {
                 await interaction[interaction.replied || interaction.deferred ? "editReply" : "reply"]({
-                    content: "Something went wrong while executing that button...",
+                    content: "Something went wrong while executing that button...\n*The updater will now restart...*",
                     ephemeral: true,
                 });
             } catch {
@@ -27,6 +27,7 @@ export default async (interaction: Interaction) => {
                 logger.error(
                     `Error while handling a button\n${err instanceof Error ? err.stack ?? err.message : String(err)}`
                 );
+                process.exit(1);
             }
         }
     }

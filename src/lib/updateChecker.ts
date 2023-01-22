@@ -42,11 +42,15 @@ async function getOldVersion(): Promise<string> {
 
 async function checkForUpdates(): Promise<void> {
     try {
-        const { stderr: pullStdErr } = await exec("git pull");
-        if (pullStdErr.split("\n").length > 3) throw new Error(pullStdErr);
+        await exec("git pull");
         const newVersion = await getLatestVersion();
         const oldVersion = await getOldVersion();
-        logger.debug(`Versions, old: ${oldVersion}, new: ${newVersion}`);
+        logger.debug(
+            `Versions, old: ${oldVersion}, new: ${newVersion}, newer: ${isNewer(
+                newVersion,
+                oldVersion
+            )}, found: ${hasVersionBeenFound(newVersion)}`
+        );
         if (newVersion === oldVersion || hasVersionBeenFound(newVersion) || !isNewer(newVersion, oldVersion)) return;
         markVersionAsFound(newVersion);
 

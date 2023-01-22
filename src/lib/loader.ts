@@ -1,5 +1,5 @@
 import type { Awaitable } from "discord.js";
-import { mkdir, readdir } from "node:fs/promises";
+import { mkdir, readdir, rm } from "node:fs/promises";
 import { config } from "../config.js";
 import { Button, ctx } from "../ctx.js";
 import { exec } from "./exec.js";
@@ -62,29 +62,21 @@ async function load() {
 
     logger.debug("Setting up git...");
 
+    await rm("/osu/aur", { recursive: true, force: true });
     await mkdir("/osu/aur");
 
-    await exec(`git config --global user.name "${config.git.user}"`, { errorOnStdErr: true });
-    await exec(`git config --global user.email "${config.git.email}"`, { errorOnStdErr: true });
+    await exec(`git config --global user.name "${config.git.user}"`);
+    await exec(`git config --global user.email "${config.git.email}"`);
     await exec(
-        `git config --global core.sshCommand "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${config.git.sshKey}"`,
-        { errorOnStdErr: true }
+        `git config --global core.sshCommand "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR -i ${config.git.sshKey}"`
     );
-    const { stderr: cloneStdErr } = await exec("git clone aur@aur.archlinux.org:osu-lazer-bin.git .");
-    if (cloneStdErr.split("\n").length > 3) throw new Error(cloneStdErr);
+    await exec(`git clone "${config.git.repo}" .`);
 
     logger.success("Git initialized!");
 
     logger.debug("Starting update scheduler...");
 
-    try {
-        startScheduler();
-    } catch (err) {
-        logger.error(
-            `Failed starting update scheduler\n${err instanceof Error ? err.stack ?? err.message : String(err)}`
-        );
-        process.exit(1);
-    }
+    startScheduler();
 
     logger.success("Started update scheduler!");
 }

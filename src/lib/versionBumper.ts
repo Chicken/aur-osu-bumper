@@ -9,8 +9,7 @@ export async function bumpVersionTo(version: string, generatePatch = false): Pro
     actionLock = true;
     logger.debug(generatePatch ? "Generating a patch for" : "Bumping to", version);
 
-    const { stderr: pullStdErr } = await exec("git pull");
-    if (pullStdErr.split("\n").length > 3) throw new Error(pullStdErr);
+    await exec("git pull");
 
     const pkgbuild = (await readFile("/osu/aur/PKGBUILD", "utf8"))
         .replace(/^pkgver=.+$/m, `pkgver=${version}`)
@@ -18,19 +17,18 @@ export async function bumpVersionTo(version: string, generatePatch = false): Pro
     await writeFile("/osu/aur/PKGBUILD", pkgbuild, "utf8");
 
     await exec("updpkgsums");
-    await exec("makepkg --printsrcinfo > .SRCINFO", { errorOnStdErr: true });
-    await exec("git add PKGBUILD .SRCINFO", { errorOnStdErr: true });
+    await exec("makepkg --printsrcinfo > .SRCINFO");
+    await exec("git add PKGBUILD .SRCINFO");
 
-    await exec(`git commit -m "Bump version to ${version}"`, { errorOnStdErr: true });
+    await exec(`git commit -m "Bump version to ${version}"`);
 
     if (generatePatch) {
-        const { stdout } = await exec("git --no-pager format-patch --stdout HEAD~1", { errorOnStdErr: true });
-        await exec("git reset --hard HEAD~1", { errorOnStdErr: true });
+        const { stdout } = await exec("git --no-pager format-patch --stdout HEAD~1");
+        await exec("git reset --hard HEAD~1");
         actionLock = false;
         return stdout;
     } else {
-        const { stderr: pushStdErr } = await exec("git push -u origin master");
-        if (pushStdErr.split("\n").length > 3) throw new Error(pushStdErr);
+        await exec("git push -u origin master");
         actionLock = false;
     }
 }
