@@ -1,4 +1,5 @@
 import type { ButtonInteraction, Client } from "discord.js";
+import { config } from "./config.js";
 
 export interface Button {
     run: (button: ButtonInteraction, args: string[]) => Promise<void>;
@@ -20,3 +21,6 @@ class Context {
 }
 
 export const ctx = new Context();
+
+// @ts-expect-error for debugging purposes
+if (config.debugMode && globalThis) globalThis.ctx = ctx;

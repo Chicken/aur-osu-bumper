@@ -76,6 +76,8 @@ async function checkForUpdates(): Promise<void> {
             I found a new update!!!! \\\\(^ヮ^)/
             We're going from \`${oldVersion}\` to \`${newVersion}\`!! Exciting!!! o(>ω<)o
             Will you guys please check if I didn't make a fucky wucky? (⌒\\_⌒;)
+            Check the changelog here <https://github.com/ppy/osu/releases/tag/${newVersion}> ૮ ˶ᵔ ᵕ ᵔ˶ ა
+            Or wait for the lazer updates youtube video o(≧▽≦)o
 
             *Press the ❔ button to view a diff of changes.*
             *Press the ✅ button to approve the changes!*

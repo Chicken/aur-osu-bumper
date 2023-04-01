@@ -18,4 +18,5 @@ export const config = {
         sshKey: process.env.GIT_SSH_KEY!,
         repo: process.env.GIT_REPO!,
     },
+    debugMode: process.env.NODE_ENV === "development",
 } as const;
