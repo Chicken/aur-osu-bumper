@@ -17,6 +17,8 @@ import { logger } from "./logger.js";
 function isNewer(a: string, b: string): boolean {
     const [aYear, aDate, aPatch] = a.split(".").map(Number);
     const [bYear, bDate, bPatch] = b.split(".").map(Number);
+    if (aYear == null || aDate == null || aPatch == null || bYear == null || bDate == null || bPatch == null)
+        throw new Error("Invalid version");
     if (aYear > bYear) return true;
     if (aYear < bYear) return false;
     if (aDate > bDate) return true;
@@ -25,10 +27,11 @@ function isNewer(a: string, b: string): boolean {
     return false;
 }
 
-async function getLatestVersion(): Promise<string> {
-    const res = (await bent("GET", "json")("https://api.github.com/repos/ppy/osu/releases", undefined, {
+async function getLatestVersion(prereleases: boolean): Promise<string> {
+    let res = (await bent("GET", "json")("https://api.github.com/repos/ppy/osu/releases", undefined, {
         "User-Agent": "aur-osu-bumper",
-    })) as { name: string }[];
+    })) as { name: string; prerelease: boolean }[];
+    res = res.filter((r) => prereleases || !r.prerelease);
     if (!res[0]?.name || !/^\d{4}\.\d{3,4}\.\d*$/.test(res[0].name)) throw new Error("No release found!");
     return res[0].name;
 }
@@ -43,7 +46,7 @@ async function getOldVersion(): Promise<string> {
 async function checkForUpdates(): Promise<void> {
     try {
         await exec("git pull");
-        const newVersion = await getLatestVersion();
+        const newVersion = await getLatestVersion(config.prereleases);
         const oldVersion = await getOldVersion();
         logger.debug(
             `Versions, old: ${oldVersion}, new: ${newVersion}, newer: ${isNewer(
@@ -55,7 +58,7 @@ async function checkForUpdates(): Promise<void> {
         markVersionAsFound(newVersion);
 
         const ch = await ctx.client.channels.fetch(config.channel).catch(() => null);
-        if (!ch || !ch.isTextBased()) throw new Error("Channel not found");
+        if (!ch || !ch.isSendable()) throw new Error("Channel not found");
 
         const diffButton = new ButtonBuilder()
             .setCustomId(`diff-${newVersion}`)
@@ -73,7 +76,7 @@ async function checkForUpdates(): Promise<void> {
 
         await ch.send({
             content: `
-            I found a new update!!!! \\\\(^ヮ^)/
+            I found a new update for **${config.releaseChannelName}**!!! \\\\(^ヮ^)/
             We're going from \`${oldVersion}\` to \`${newVersion}\`!! Exciting!!! o(>ω<)o
             Will you guys please check if I didn't make a fucky wucky? (⌒\\_⌒;)
             Check the changelog here <https://github.com/ppy/osu/releases/tag/${newVersion}> ૮ ˶ᵔ ᵕ ᵔ˶ ა
@@ -90,7 +93,7 @@ async function checkForUpdates(): Promise<void> {
             components: [row],
         });
     } catch (err) {
-        logger.error(`Update checker failed\n${err instanceof Error ? err.stack ?? err.message : String(err)}`);
+        logger.error(`Update checker failed\n${err instanceof Error ? (err.stack ?? err.message) : String(err)}`);
     }
 }
 

@@ -13,6 +13,8 @@ services:
       GIT_EMAIL: "bot@example.com"
       GIT_SSH_KEY: "/ssh_key"
       GIT_REPO: "aur@aur.archlinux.org:osu-lazer-bin.git"
+      PRERELEASES: false
+      RELEASE_CHANNEL_NAME: Lazer Stable
       CRON_SCHEDULE: "*/5 * * * *"
       DISCORD_TOKEN: "VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0"
       DISCORD_CHANNEL: "123456789012345678"

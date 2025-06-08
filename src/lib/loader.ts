@@ -1,7 +1,7 @@
 import type { Awaitable } from "discord.js";
 import { mkdir, readdir, rm } from "node:fs/promises";
 import { config } from "../config.js";
-import { Button, ctx } from "../ctx.js";
+import { type Button, ctx } from "../ctx.js";
 import { exec } from "./exec.js";
 import { logger } from "./logger.js";
 import { startScheduler } from "./updateChecker.js";
@@ -9,7 +9,7 @@ import { startScheduler } from "./updateChecker.js";
 async function loadEvents(files: string[]) {
     await Promise.all(
         files.map(async (file) => {
-            const eventName = file.split(".")[0];
+            const eventName = file.split(".")[0]!;
             try {
                 logger.debug(`Loading event "${eventName}"`);
                 const { default: event } = (await import(`../events/${file}`)) as {
@@ -20,7 +20,7 @@ async function loadEvents(files: string[]) {
             } catch (err) {
                 logger.error(
                     `Failed loading event "${eventName}"\n${
-                        err instanceof Error ? err.stack ?? err.message : String(err)
+                        err instanceof Error ? (err.stack ?? err.message) : String(err)
                     }`
                 );
                 process.exit(1);
@@ -32,7 +32,7 @@ async function loadEvents(files: string[]) {
 async function loadButtons(files: string[]) {
     await Promise.all(
         files.map(async (file) => {
-            const buttonName = file.split(".")[0];
+            const buttonName = file.split(".")[0]!;
             try {
                 logger.debug(`Loading button "${buttonName}"`);
                 const button = (await import(`../buttons/${file}`)) as Button;
@@ -40,7 +40,7 @@ async function loadButtons(files: string[]) {
             } catch (err) {
                 logger.error(
                     `Failed loading button "${buttonName}"\n${
-                        err instanceof Error ? err.stack ?? err.message : String(err)
+                        err instanceof Error ? (err.stack ?? err.message) : String(err)
                     }`
                 );
                 process.exit(1);

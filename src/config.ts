@@ -1,6 +1,15 @@
 import { logger } from "./lib/logger.js";
 
-const requiredKeys = ["DISCORD_TOKEN", "DISCORD_CHANNEL", "GIT_USER", "GIT_EMAIL", "GIT_SSH_KEY", "GIT_REPO"] as const;
+const requiredKeys = [
+    "DISCORD_TOKEN",
+    "DISCORD_CHANNEL",
+    "GIT_USER",
+    "GIT_EMAIL",
+    "GIT_SSH_KEY",
+    "GIT_REPO",
+    "PRERELEASES",
+    "RELEASE_CHANNEL_NAME",
+] as const;
 const missing = requiredKeys.filter((key) => !process.env[key]);
 if (missing.length) {
     logger.error(`Missing required environment variables: ${missing.join(", ")}`);
@@ -12,6 +21,8 @@ export const config = {
     channel: process.env.DISCORD_CHANNEL!,
     cronSchedule: process.env.CRON_SCHEDULE ?? "*/5 * * * *",
     hastebinInstance: new URL(process.env.HASTEBIN_INSTANCE ?? "https://hastebin.com/").href,
+    prereleases: process.env.PRERELEASES === "true",
+    releaseChannelName: process.env.RELEASE_CHANNEL_NAME,
     git: {
         user: process.env.GIT_USER!,
         email: process.env.GIT_EMAIL!,

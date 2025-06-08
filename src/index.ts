@@ -22,6 +22,6 @@ try {
     logger.debug("Logging in...");
     await client.login(config.token);
 } catch (err) {
-    logger.error(`Error during startup\n${err instanceof Error ? err.stack ?? err.message : String(err)}`);
+    logger.error(`Error during startup\n${err instanceof Error ? (err.stack ?? err.message) : String(err)}`);
     process.exit(1);
 }

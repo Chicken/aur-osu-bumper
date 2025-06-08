@@ -5,6 +5,7 @@ import { bumpVersionTo } from "../lib/versionBumper.js";
 
 export async function run(button: ButtonInteraction, [version]: string[]): Promise<void> {
     await button.deferReply();
+    if (!version) throw new Error("Missing version in diff buttton");
 
     try {
         const patchContent = await bumpVersionTo(version, true);

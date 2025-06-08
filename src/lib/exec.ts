@@ -1,4 +1,4 @@
-import { exec as execCB, ProcessEnvOptions } from "child_process";
+import { exec as execCB, type ProcessEnvOptions } from "child_process";
 import { logger } from "./logger.js";
 
 /**

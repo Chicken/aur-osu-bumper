@@ -27,4 +27,4 @@ export const logger = {
     debug: (...data: unknown[]) => (config.debugMode ? console.log(`${time()} ${dataToString(data, yellow)}`) : void 0),
 };
 
-export const formatError = (err: unknown) => (err instanceof Error ? err.stack ?? err.message : String(err));
+export const formatError = (err: unknown) => (err instanceof Error ? (err.stack ?? err.message) : String(err));

@@ -6,7 +6,7 @@ export default async (interaction: Interaction) => {
     if (interaction.isButton()) {
         try {
             const [btn, ...args] = interaction.customId.split("-");
-            const button = ctx.buttons.get(btn);
+            const button = ctx.buttons.get(btn!);
             if (!button) {
                 await interaction.reply({
                     content: "For some reason this button was left unhandled.",
@@ -25,7 +25,7 @@ export default async (interaction: Interaction) => {
                 // ignore
             } finally {
                 logger.error(
-                    `Error while handling a button\n${err instanceof Error ? err.stack ?? err.message : String(err)}`
+                    `Error while handling a button\n${err instanceof Error ? (err.stack ?? err.message) : String(err)}`
                 );
                 process.exit(1);
             }

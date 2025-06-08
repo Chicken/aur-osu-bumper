@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 ENV CI=true
 ENV FORCE_COLOR=true
@@ -31,7 +31,7 @@ RUN pacman -Syu --noconfirm \
         git \
         openssh \
         pacman-contrib \
-        nodejs-lts-hydrogen \
+        nodejs-lts-jod \
         yarn \
     && pacman -Scc --noconfirm \
     && rm -rf /var/cache/pacman/pkg/* \
