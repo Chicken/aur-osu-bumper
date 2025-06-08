@@ -61,15 +61,15 @@ async function checkForUpdates(): Promise<void> {
         if (!ch || !ch.isSendable()) throw new Error("Channel not found");
 
         const diffButton = new ButtonBuilder()
-            .setCustomId(`diff-${newVersion}`)
+            .setCustomId(`${config.instanceId}-diff-${newVersion}`)
             .setEmoji("❔")
             .setStyle(ButtonStyle.Primary);
         const acceptButton = new ButtonBuilder()
-            .setCustomId(`accept-${newVersion}`)
+            .setCustomId(`${config.instanceId}-accept-${newVersion}`)
             .setEmoji("✅")
             .setStyle(ButtonStyle.Success);
         const denyButton = new ButtonBuilder()
-            .setCustomId(`deny-${newVersion}`)
+            .setCustomId(`${config.instanceId}-deny-${newVersion}`)
             .setEmoji("❌")
             .setStyle(ButtonStyle.Secondary);
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(diffButton, acceptButton, denyButton);

@@ -1,6 +1,7 @@
 import { logger } from "./lib/logger.js";
 
 const requiredKeys = [
+    "INSTANCE_ID",
     "DISCORD_TOKEN",
     "DISCORD_CHANNEL",
     "GIT_USER",
@@ -17,6 +18,7 @@ if (missing.length) {
 }
 
 export const config = {
+    instanceId: process.env.INSTANCE_ID,
     token: process.env.DISCORD_TOKEN!,
     channel: process.env.DISCORD_CHANNEL!,
     cronSchedule: process.env.CRON_SCHEDULE ?? "*/5 * * * *",

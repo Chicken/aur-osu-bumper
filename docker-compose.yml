@@ -9,6 +9,7 @@ services:
       - "./data:/osu/data"
       - "./automation_key:/ssh_key:ro"
     environment:
+      INSTANCE_ID: 1
       GIT_USER: "Bump Bot"
       GIT_EMAIL: "bot@example.com"
       GIT_SSH_KEY: "/ssh_key"

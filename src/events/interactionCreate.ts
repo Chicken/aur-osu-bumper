@@ -1,11 +1,13 @@
 import type { Interaction } from "discord.js";
 import { ctx } from "../ctx.js";
 import { logger } from "../lib/logger.js";
+import { config } from "../config.js";
 
 export default async (interaction: Interaction) => {
     if (interaction.isButton()) {
         try {
-            const [btn, ...args] = interaction.customId.split("-");
+            const [instanceId, btn, ...args] = interaction.customId.split("-");
+            if (instanceId !== config.instanceId) return;
             const button = ctx.buttons.get(btn!);
             if (!button) {
                 await interaction.reply({
